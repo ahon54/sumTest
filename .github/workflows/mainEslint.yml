@@ -1,9 +1,21 @@
-workflow "Pull Request" {
-  on = "pull_request"
-  resolves = ["ESLint"]
-}
-
-action "ESLint" {
-  uses = "hallee/eslint-action@master"
-  secrets = ["GITHUB_TOKEN"]
-}
+name: git action part 2
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js 12.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: "12.x"
+    - name: npm install , and test
+      run: |
+        npm install
+        npm test
+    - name: ESLint Action
+      uses: hallee/eslint-action@1.0.1
